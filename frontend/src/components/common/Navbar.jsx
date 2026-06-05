@@ -139,7 +139,7 @@ function NotificationPanel({ darkMode, onClose }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 8, scale: 0.95 }}
       transition={{ duration: 0.15 }}
-      className={`absolute right-0 mt-2 w-80 rounded-2xl shadow-xl border overflow-hidden z-50 ${panelBg}`}
+      className={`absolute right-0 mt-2 w-[calc(100vw-2rem)] max-w-sm rounded-2xl border shadow-xl overflow-hidden z-50 ${panelBg}`}
       onClick={e => e.stopPropagation()}
     >
       {/* Header */}
@@ -421,7 +421,7 @@ export default function Navbar({ products = [] }) {
 
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
-              <span className={`font-display text-2xl font-semibold tracking-tight transition-colors duration-300 ${
+              <span className={`font-display text-xl font-semibold tracking-tight transition-colors duration-300 sm:text-2xl ${
                 isSolid ? darkMode ? 'text-white' : 'text-ink-950' : 'text-white'
               }`}>
                 SHUMARA
@@ -717,7 +717,7 @@ export default function Navbar({ products = [] }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-start justify-center pt-20 px-4"
+            className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto px-3 pt-20 sm:px-4"
             onClick={() => setSearchOpen(false)}
           >
             <div className="absolute inset-0 bg-ink-950/60 backdrop-blur-sm" />
@@ -728,7 +728,7 @@ export default function Navbar({ products = [] }) {
               className="relative w-full max-w-xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className={`flex items-center gap-3 rounded-2xl shadow-2xl px-4 py-3 ${
+              <div className={`flex flex-wrap items-center gap-2 rounded-2xl px-3 py-3 shadow-2xl sm:flex-nowrap sm:gap-3 sm:px-4 ${
                 darkMode ? 'bg-ink-900' : 'bg-white'
               }`}>
                 <Search size={18} className="text-ink-400 shrink-0" />
@@ -739,7 +739,7 @@ export default function Navbar({ products = [] }) {
                   value={searchQuery}
                   onChange={(e) => handleSearchInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className={`flex-1 outline-none text-sm placeholder-ink-400 bg-transparent ${
+                  className={`min-w-0 flex-1 bg-transparent text-sm outline-none placeholder-ink-400 ${
                     darkMode ? 'text-white' : 'text-ink-900'
                   }`}
                   autoComplete="off"
@@ -753,7 +753,7 @@ export default function Navbar({ products = [] }) {
                 )}
                 <button
                   onClick={() => setSmartMode(m => !m)}
-                  className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all shrink-0 ${
+                  className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all ${
                     smartMode
                       ? 'bg-ink-950 text-white dark:bg-gold-500 dark:text-ink-950'
                       : 'bg-ink-100 text-ink-500 hover:bg-ink-200 dark:bg-ink-800 dark:text-ink-300'
@@ -764,7 +764,7 @@ export default function Navbar({ products = [] }) {
                 </button>
                 <button
                   onClick={() => doSearch()}
-                  className="bg-ink-950 text-white py-1.5 px-4 rounded-full text-xs font-medium hover:bg-ink-800 transition-colors shrink-0 dark:bg-gold-500 dark:text-ink-950 dark:hover:bg-gold-400"
+                  className="shrink-0 rounded-full bg-ink-950 px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-ink-800 dark:bg-gold-500 dark:text-ink-950 dark:hover:bg-gold-400"
                 >
                   Search
                 </button>

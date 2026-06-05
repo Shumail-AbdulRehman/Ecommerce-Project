@@ -72,9 +72,9 @@ export default function ProductCard({ product, index = 0 }) {
             <span className="text-xs text-ink-400">({product.review_count})</span>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-baseline gap-2">
-              <span className="text-lg font-semibold text-ink-950">{formatPrice(product.price)}</span>
+          <div className="flex items-end justify-between gap-3">
+            <div className="min-w-0 flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
+              <span className="break-words text-base font-semibold leading-tight text-ink-950 sm:text-lg">{formatPrice(product.price)}</span>
               {product.original_price && (
                 <span className="text-sm text-ink-400 line-through">{formatPrice(product.original_price)}</span>
               )}
@@ -84,7 +84,7 @@ export default function ProductCard({ product, index = 0 }) {
               whileTap={{ scale: 0.9 }}
               onClick={() => addToCart(product.id)}
               disabled={loading || product.stock === 0}
-              className="w-9 h-9 rounded-full bg-ink-950 text-white flex items-center justify-center hover:bg-ink-700 transition-colors disabled:opacity-40"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink-950 text-white transition-colors hover:bg-ink-700 disabled:opacity-40"
             >
               <ShoppingBag size={15} />
             </motion.button>

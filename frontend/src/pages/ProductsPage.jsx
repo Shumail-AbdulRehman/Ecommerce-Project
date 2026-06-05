@@ -80,9 +80,9 @@ export default function ProductsPage({ onProductsLoad }) {
     : 'All Products';
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20">
+    <div className="mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-6 sm:pt-28 sm:pb-20 lg:px-8">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -96,7 +96,7 @@ export default function ProductsPage({ onProductsLoad }) {
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-wrap items-center gap-3 mb-8">
+      <div className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8">
         {/* Mobile filter toggle */}
         <button
           onClick={() => setFiltersOpen(!filtersOpen)}
@@ -202,7 +202,7 @@ export default function ProductsPage({ onProductsLoad }) {
 
       {/* Products Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
           {Array(12).fill(0).map((_, i) => <ProductCardSkeleton key={i} />)}
         </div>
       ) : products.length === 0 ? (
@@ -213,7 +213,7 @@ export default function ProductsPage({ onProductsLoad }) {
           <button onClick={clearFilters} className="btn-primary">Clear Filters</button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
           {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
         </div>
       )}

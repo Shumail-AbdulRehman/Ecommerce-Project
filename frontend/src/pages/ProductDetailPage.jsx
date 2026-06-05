@@ -151,8 +151,8 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Price */}
-            <div className="flex items-baseline gap-3 mb-6">
-              <span className="text-4xl font-semibold text-ink-950">{formatPrice(product.price)}</span>
+            <div className="mb-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span className="break-words text-3xl font-semibold text-ink-950 sm:text-4xl">{formatPrice(product.price)}</span>
               {product.original_price && (
                 <span className="text-xl text-ink-400 line-through">{formatPrice(product.original_price)}</span>
               )}

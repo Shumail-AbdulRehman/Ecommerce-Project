@@ -25,7 +25,7 @@ function HeroSection() {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
   return (
-    <section ref={ref} className="relative h-screen min-h-[600px] max-h-[900px] overflow-hidden flex items-center">
+    <section ref={ref} className="relative flex min-h-[100svh] overflow-hidden py-24 sm:min-h-[720px] sm:max-h-[900px] sm:items-center">
       <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&auto=format&q=80"
@@ -45,23 +45,23 @@ function HeroSection() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-500/20 border border-gold-500/30 text-gold-300 text-xs font-medium tracking-widest uppercase mb-6">
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-gold-500/20 px-3 py-1.5 text-[11px] font-medium uppercase tracking-widest text-gold-300 sm:mb-6 sm:px-4 sm:text-xs">
               New Collection 2026
             </span>
-            <h1 className="font-display text-5xl md:text-7xl font-semibold text-white leading-[1.05] mb-6">
+            <h1 className="mb-5 font-display text-4xl font-semibold leading-[1.05] text-white sm:text-5xl md:text-7xl">
               Crafted for<br />
               <em className="text-gold-400 not-italic">those who</em><br />
               demand more.
             </h1>
-            <p className="text-ink-200 text-lg mb-8 max-w-md leading-relaxed">
+            <p className="mb-7 max-w-md text-base leading-relaxed text-ink-200 sm:mb-8 sm:text-lg">
               Discover premium products curated across fashion, tech, home, travel, wellness, gaming, and everyday essentials.
             </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <Link to="/products" className="btn-primary bg-white text-ink-950 hover:bg-ink-100 px-8 py-3.5">
+            <div className="flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:items-center">
+              <Link to="/products" className="btn-primary bg-white text-ink-950 hover:bg-ink-100 px-6 py-3 sm:px-8 sm:py-3.5">
                 Shop Now
                 <ArrowRight size={16} />
               </Link>
-              <Link to="/products?featured=true" className="btn-outline border-white text-white hover:bg-white hover:text-ink-950 px-8 py-3.5">
+              <Link to="/products?featured=true" className="btn-outline border-white text-white hover:bg-white hover:text-ink-950 px-6 py-3 sm:px-8 sm:py-3.5">
                 Featured Picks
               </Link>
             </div>
@@ -71,7 +71,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex items-center gap-8 mt-14 pt-8 border-t border-white/20"
+            className="mt-10 grid grid-cols-3 gap-4 border-t border-white/20 pt-6 sm:mt-14 sm:flex sm:items-center sm:gap-8 sm:pt-8"
           >
             {[
               { value: '200+', label: 'Curated Products' },
@@ -79,7 +79,7 @@ function HeroSection() {
               { value: '4.7', label: 'Avg. Rating' },
             ].map((stat) => (
               <div key={stat.label}>
-                <div className="text-2xl font-semibold text-white font-mono">{stat.value}</div>
+                <div className="font-mono text-xl font-semibold text-white sm:text-2xl">{stat.value}</div>
                 <div className="text-xs text-ink-300 mt-0.5">{stat.label}</div>
               </div>
             ))}
@@ -90,7 +90,7 @@ function HeroSection() {
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5"
+        className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-1.5 sm:flex"
       >
         <span className="text-white/50 text-xs tracking-widest uppercase">Scroll</span>
         <div className="w-px h-10 bg-gradient-to-b from-white/50 to-transparent" />
@@ -107,8 +107,8 @@ function CategorySection({ sections }) {
   const inView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      <div className="flex items-end justify-between mb-10">
+    <section ref={ref} className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <div className="mb-8 flex items-end justify-between sm:mb-10">
         <div>
           <span className="text-xs text-gold-600 font-medium tracking-widest uppercase">Browse by</span>
           <h2 className="section-title mt-1">Categories</h2>
@@ -118,7 +118,7 @@ function CategorySection({ sections }) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-5">
         {categories.slice(0, 10).map((cat, i) => (
           <motion.div
             key={cat.slug}
@@ -128,7 +128,7 @@ function CategorySection({ sections }) {
           >
             <Link
               to={`/products?category=${cat.slug}`}
-              className="group relative block aspect-[4/5] rounded-2xl overflow-hidden bg-ink-100"
+              className="group relative block aspect-[4/5] overflow-hidden rounded-xl bg-ink-100 sm:rounded-2xl"
             >
               <img
                 src={cat.image_url}
@@ -136,8 +136,8 @@ function CategorySection({ sections }) {
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink-950/75 via-ink-950/10 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-4">
-                <span className="text-white font-semibold text-sm">{cat.name}</span>
+              <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+                <span className="text-sm font-semibold text-white">{cat.name}</span>
                 {cat.description && (
                   <p className="text-white/65 text-xs line-clamp-2 mt-1">{cat.description}</p>
                 )}
@@ -160,8 +160,8 @@ function FeaturesBar() {
 
   return (
     <section className="border-y border-ink-100 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        <div className="grid grid-cols-1 gap-5 min-[420px]:grid-cols-2 md:grid-cols-4 md:gap-6">
           {features.map((f, i) => (
             <motion.div
               key={f.title}
@@ -208,8 +208,8 @@ function MarqueeBanner() {
 
 function FeaturedProducts({ products, loading }) {
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      <div className="flex items-end justify-between mb-10">
+    <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <div className="mb-8 flex items-end justify-between sm:mb-10">
         <div>
           <span className="text-xs text-gold-600 font-medium tracking-widest uppercase">Hand-picked</span>
           <h2 className="section-title mt-1">Featured Products</h2>
@@ -219,7 +219,7 @@ function FeaturedProducts({ products, loading }) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
         {loading
           ? Array(8).fill(0).map((_, i) => <ProductCardSkeleton key={i} />)
           : products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)
@@ -233,7 +233,7 @@ function CategoryProductRows({ sections, loading }) {
   const skeletonRows = Array(4).fill(0);
 
   return (
-    <section className="bg-ink-50 border-y border-ink-100 py-20">
+    <section className="border-y border-ink-100 bg-ink-50 py-14 sm:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
           <div>
@@ -254,7 +254,7 @@ function CategoryProductRows({ sections, loading }) {
               <div className="h-8 bg-ink-100 rounded-xl w-56 mb-5 animate-pulse" />
               <div className="flex gap-5 overflow-hidden">
                 {Array(4).fill(0).map((__, i) => (
-                  <div key={i} className="min-w-[245px] sm:min-w-[270px]">
+                  <div key={i} className="min-w-[185px] min-[420px]:min-w-[220px] sm:min-w-[270px]">
                     <ProductCardSkeleton />
                   </div>
                 ))}
@@ -287,9 +287,9 @@ function CategoryProductRows({ sections, loading }) {
                 </Link>
               </div>
 
-              <div className="flex gap-5 overflow-x-auto pb-3 snap-x snap-mandatory scrollbar-hide">
+              <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 sm:gap-5 scrollbar-hide">
                 {section.products.map((product, i) => (
-                  <div key={product.id} className="min-w-[245px] sm:min-w-[270px] lg:min-w-[285px] snap-start">
+                  <div key={product.id} className="min-w-[185px] snap-start min-[420px]:min-w-[220px] sm:min-w-[270px] lg:min-w-[285px]">
                     <ProductCard product={product} index={Math.min(i, 3)} />
                   </div>
                 ))}
@@ -329,16 +329,16 @@ export default function HomePage() {
       <FeaturedProducts products={featured} loading={loadingFeatured} />
       <CategoryProductRows sections={sections} loading={loadingSections} />
 
-      <section className="mx-4 sm:mx-6 lg:mx-8 my-20">
+      <section className="mx-4 my-14 sm:mx-6 sm:my-20 lg:mx-8">
         <div className="max-w-7xl mx-auto">
-          <div className="relative rounded-3xl overflow-hidden">
+          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl">
             <img
               src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&auto=format&q=80"
               alt="sale"
-              className="w-full h-72 md:h-96 object-cover"
+              className="h-80 w-full object-cover md:h-96"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-ink-950/80 to-transparent flex items-center">
-              <div className="px-10 md:px-16 max-w-lg">
+            <div className="absolute inset-0 flex items-center bg-gradient-to-r from-ink-950/85 via-ink-950/45 to-transparent">
+              <div className="max-w-lg px-6 sm:px-10 md:px-16">
                 <motion.div
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -346,7 +346,7 @@ export default function HomePage() {
                   transition={{ duration: 0.6 }}
                 >
                   <span className="text-gold-400 text-xs font-medium tracking-widest uppercase">Limited Time</span>
-                  <h2 className="font-display text-4xl md:text-5xl text-white font-semibold mt-2 mb-4">
+                  <h2 className="mt-2 mb-4 font-display text-3xl font-semibold text-white sm:text-4xl md:text-5xl">
                     Up to 40% off<br />selected styles
                   </h2>
                   <Link to="/products?sort=price-asc" className="btn-primary bg-white text-ink-950 hover:bg-ink-100">

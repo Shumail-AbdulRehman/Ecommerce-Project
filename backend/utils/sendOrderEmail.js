@@ -56,10 +56,9 @@ function getETA(status) {
 
 
 function formatCurrency(amount) {
-  return new Intl.NumberFormat("en-PK", {
-    style: "currency",
-    currency: "PKR",
-  }).format(amount);
+  const value = Number(amount || 0);
+  const safeValue = Number.isFinite(value) ? Math.round(value) : 0;
+  return `PKR ${safeValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
 }
 
 
