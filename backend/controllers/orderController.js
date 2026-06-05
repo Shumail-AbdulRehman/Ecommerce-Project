@@ -1,4 +1,4 @@
-const { mongoose, objectId, Product, CartItem, Order, User, orderPayload } = require("../models");
+const { mongoose, objectId, Product, CartItem, Order, User, Category, productPayload, orderPayload } = require("../models");
 const { sendOrderStatusEmail } = require("../utils/sendOrderEmail");
 const { createNotification } = require("../utils/notificationHelper");
 
@@ -387,7 +387,7 @@ exports.getAllOrders = async (req, res) => {
 exports.getAdminStats = async (_req, res) => {
   try {
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    const [orderStats, total_products, total_users, recentOrders] = await Promise.all([
+    const [orderStats, total_products, total_categories, total_users, recentOrders, lowStockProducts] = await Promise.all([
       Order.aggregate([
         {
           $facet: {
@@ -418,8 +418,15 @@ exports.getAdminStats = async (_req, res) => {
         },
       ]),
       Product.countDocuments(),
+      Category.countDocuments(),
       User.countDocuments(),
       Order.find().populate(USER_POPULATE).sort({ created_at: -1 }).limit(5).lean(),
+      Product.find({ is_active: true, stock: { $lte: 10 } })
+        .select("name price stock image_url category_id rating review_count is_featured created_at")
+        .populate({ path: "category_id", select: "name slug", options: { lean: true } })
+        .sort({ stock: 1, created_at: -1 })
+        .limit(6)
+        .lean(),
     ]);
     const stats = orderStats[0] || {};
     const totals = stats.totals?.[0] || {};
@@ -432,8 +439,10 @@ exports.getAdminStats = async (_req, res) => {
       total_orders: totals.total_orders || 0,
       total_revenue: totals.total_revenue || 0,
       total_products,
+      total_categories,
       total_users,
       statusCounts,
+      lowStockProducts: lowStockProducts.map(productPayload),
       recentOrders: recentOrders.map(orderPayload),
       dailyRevenue: (stats.dailyRevenue || []).map((d) => ({ date: d._id, revenue: d.revenue, orders: d.orders })),
     });

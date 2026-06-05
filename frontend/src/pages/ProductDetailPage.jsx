@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import { ShoppingBag, Star, Check, ChevronLeft, Minus, Plus, Tag } from 'lucide-react';
 import api from '../utils/api';
 import { useCart } from '../context/CartContext';
@@ -11,21 +12,24 @@ import { formatPrice } from "../utils/price";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [activeImg, setActiveImg] = useState(0);
   const [added, setAdded] = useState(false);
   const { addToCart, loading: cartLoading } = useCart();
 
+  const { data: product, isLoading: loading } = useQuery({
+    queryKey: ['products', 'detail', id],
+    queryFn: async () => {
+      const { data } = await api.get(`/products/${id}`);
+      return data;
+    },
+    enabled: Boolean(id),
+    staleTime: 60 * 1000,
+  });
+
   useEffect(() => {
-    setLoading(true);
     setActiveImg(0);
     setQuantity(1);
-    api.get(`/products/${id}`)
-      .then(({ data }) => setProduct(data))
-      .catch(console.error)
-      .finally(() => setLoading(false));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [id]);
 

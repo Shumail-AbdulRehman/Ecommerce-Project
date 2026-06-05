@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import { SlidersHorizontal, X, ChevronDown } from 'lucide-react';
 import api from '../utils/api';
 import ProductCard from '../components/product/ProductCard';
@@ -18,10 +19,6 @@ const SORT_OPTIONS = [
 
 export default function ProductsPage({ onProductsLoad }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [pagination, setPagination] = useState({});
-  const [loading, setLoading] = useState(true);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const category = searchParams.get('category') || '';
@@ -30,9 +27,18 @@ export default function ProductsPage({ onProductsLoad }) {
   const featured = searchParams.get('featured') || '';
   const page = parseInt(searchParams.get('page') || '1');
 
-  const fetchProducts = useCallback(async () => {
-    setLoading(true);
-    try {
+  const productParams = {
+    category,
+    search,
+    sort,
+    featured,
+    page,
+    limit: 12,
+  };
+
+  const { data: productResponse, isLoading: loading } = useQuery({
+    queryKey: ['products', 'list', productParams],
+    queryFn: async () => {
       const params = new URLSearchParams();
       if (category) params.set('category', category);
       if (search) params.set('search', search);
@@ -40,23 +46,28 @@ export default function ProductsPage({ onProductsLoad }) {
       if (featured) params.set('featured', featured);
       params.set('page', page);
       params.set('limit', '12');
-
       const { data } = await api.get(`/products?${params}`);
-      setProducts(data.products);
-      setPagination(data.pagination);
-      if (onProductsLoad) onProductsLoad(data.products);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [category, search, sort, featured, page]);
+      return data;
+    },
+    keepPreviousData: true,
+    staleTime: 60 * 1000,
+  });
 
-  useEffect(() => { fetchProducts(); }, [fetchProducts]);
+  const { data: categories = [] } = useQuery({
+    queryKey: ['products', 'categories'],
+    queryFn: async () => {
+      const { data } = await api.get('/products/categories');
+      return data;
+    },
+    staleTime: 2 * 60 * 1000,
+  });
+
+  const products = productResponse?.products || [];
+  const pagination = productResponse?.pagination || {};
 
   useEffect(() => {
-    api.get('/products/categories').then(({ data }) => setCategories(data)).catch(console.error);
-  }, []);
+    if (onProductsLoad) onProductsLoad(products);
+  }, [onProductsLoad, products]);
 
   const updateParam = (key, value) => {
     const next = new URLSearchParams(searchParams);

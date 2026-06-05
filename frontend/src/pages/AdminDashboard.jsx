@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { formatPrice } from "../utils/price";
 import {
   LayoutDashboard, Package, ShoppingCart, DollarSign,
@@ -690,14 +691,8 @@ function OrderModal({ order, customers, products, onClose, onSave, onDelete }) {
 }
 
 export default function AdminDashboard() {
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('overview');
-  const [stats, setStats] = useState(null);
-  const [topProducts, setTopProducts] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [customers, setCustomers] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [productModal, setProductModal] = useState(null);
   const [categoryModal, setCategoryModal] = useState(null);
   const [orderModal, setOrderModal] = useState(null);
@@ -722,34 +717,90 @@ export default function AdminDashboard() {
     return productList;
   };
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const [statsRes, productList, ordersRes, catsRes, customersRes, topRes] = await Promise.all([
-        api.get('/orders/admin/stats'),
-        fetchProductsForAdmin(),
-        api.get('/orders/admin/all', { params: { limit: 200 } }),
-        api.get('/products/categories'),
-        api.get('/admin/customers').catch(() => ({ data: [] })),
-        api.get('/orders/admin/top-products').catch(() => ({ data: [] })),
-      ]);
-
-      setStats(statsRes.data);
-      setProducts(productList);
-      setOrders(ordersRes.data || []);
-      setCategories(catsRes.data || []);
-      setCustomers(customersRes.data || []);
-      setTopProducts(topRes.data || []);
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to load dashboard data');
-    } finally {
-      setLoading(false);
-    }
+  const invalidateDashboardData = (...keys) => {
+    keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
   };
 
+  const wantsOverviewData = activeTab === 'overview';
+  const wantsProductsData = activeTab === 'products' || Boolean(productModal) || Boolean(orderModal);
+  const wantsOrdersData = activeTab === 'orders';
+  const wantsCategoriesData = activeTab === 'categories' || activeTab === 'products' || Boolean(productModal) || Boolean(categoryModal);
+  const wantsCustomersData = Boolean(orderModal);
+
+  const statsQuery = useQuery({
+    queryKey: ['admin', 'stats'],
+    queryFn: async () => {
+      const { data } = await api.get('/orders/admin/stats');
+      return data;
+    },
+    enabled: wantsOverviewData,
+    staleTime: 30 * 1000,
+  });
+
+  const topProductsQuery = useQuery({
+    queryKey: ['admin', 'top-products'],
+    queryFn: async () => {
+      const { data } = await api.get('/orders/admin/top-products');
+      return data;
+    },
+    enabled: wantsOverviewData,
+    staleTime: 30 * 1000,
+  });
+
+  const productsQuery = useQuery({
+    queryKey: ['admin', 'products'],
+    queryFn: fetchProductsForAdmin,
+    enabled: wantsProductsData,
+    staleTime: 30 * 1000,
+  });
+
+  const ordersQuery = useQuery({
+    queryKey: ['admin', 'orders'],
+    queryFn: async () => {
+      const { data } = await api.get('/orders/admin/all', { params: { limit: 200 } });
+      return data || [];
+    },
+    enabled: wantsOrdersData,
+    staleTime: 20 * 1000,
+  });
+
+  const categoriesQuery = useQuery({
+    queryKey: ['products', 'categories'],
+    queryFn: async () => {
+      const { data } = await api.get('/products/categories');
+      return data || [];
+    },
+    enabled: wantsCategoriesData,
+    staleTime: 60 * 1000,
+  });
+
+  const customersQuery = useQuery({
+    queryKey: ['admin', 'customers'],
+    queryFn: async () => {
+      const { data } = await api.get('/admin/customers');
+      return data || [];
+    },
+    enabled: wantsCustomersData,
+    staleTime: 60 * 1000,
+  });
+
+  const stats = statsQuery.data || null;
+  const topProducts = topProductsQuery.data || [];
+  const products = productsQuery.data || [];
+  const orders = ordersQuery.data || [];
+  const categories = categoriesQuery.data || [];
+  const customers = customersQuery.data || [];
+
+  const tabLoading =
+    (activeTab === 'overview' && (statsQuery.isLoading || topProductsQuery.isLoading)) ||
+    (activeTab === 'products' && (productsQuery.isLoading || categoriesQuery.isLoading)) ||
+    (activeTab === 'orders' && ordersQuery.isLoading) ||
+    (activeTab === 'categories' && categoriesQuery.isLoading);
+
   useEffect(() => {
-    fetchData();
-  }, []);
+    const error = statsQuery.error || topProductsQuery.error || productsQuery.error || ordersQuery.error || categoriesQuery.error || customersQuery.error;
+    if (error) toast.error(error.response?.data?.message || 'Failed to load dashboard data');
+  }, [statsQuery.error, topProductsQuery.error, productsQuery.error, ordersQuery.error, categoriesQuery.error, customersQuery.error]);
 
   const filteredProducts = useMemo(() => {
     const q = normalize(productSearch);
@@ -804,23 +855,20 @@ export default function AdminDashboard() {
   }, [orders, stats?.statusCounts]);
 
   const categoryProductCount = useMemo(() => {
-    return products.reduce((acc, product) => {
-      if (product.category_id) acc[product.category_id] = (acc[product.category_id] || 0) + 1;
+    return categories.reduce((acc, category) => {
+      acc[category.id] = Number(category.product_count || 0);
       return acc;
     }, {});
-  }, [products]);
+  }, [categories]);
 
-  const lowStockProducts = useMemo(() => products
-    .filter((product) => Number(product.stock || 0) <= 10)
-    .sort((a, b) => Number(a.stock || 0) - Number(b.stock || 0))
-    .slice(0, 6), [products]);
+  const lowStockProducts = stats?.lowStockProducts || [];
 
   const handleDeleteProduct = async (id) => {
     if (!confirm('Delete this product?')) return;
     try {
       await api.delete(`/products/${id}`);
       toast.success('Product deleted');
-      fetchData();
+      invalidateDashboardData(['admin', 'products'], ['products'], ['admin', 'stats']);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to delete product');
     }
@@ -831,7 +879,7 @@ export default function AdminDashboard() {
     try {
       await api.delete(`/products/categories/${id}`);
       toast.success('Category deleted');
-      fetchData();
+      invalidateDashboardData(['products', 'categories'], ['admin', 'stats']);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to delete category');
     }
@@ -841,7 +889,10 @@ export default function AdminDashboard() {
     try {
       await api.put(`/orders/${orderId}/status`, { status });
       toast.success('Order status updated');
-      setOrders((prev) => prev.map((order) => order.id === orderId ? { ...order, status } : order));
+      queryClient.setQueryData(['admin', 'orders'], (current = []) => (
+        current.map((order) => order.id === orderId ? { ...order, status } : order)
+      ));
+      invalidateDashboardData(['admin', 'stats']);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to update order status');
     }
@@ -853,7 +904,7 @@ export default function AdminDashboard() {
       await api.delete(`/orders/${id}`);
       toast.success('Order deleted');
       setOrderModal(null);
-      fetchData();
+      invalidateDashboardData(['admin', 'orders'], ['admin', 'stats'], ['admin', 'top-products']);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to delete order');
     }
@@ -913,7 +964,7 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        {loading && !stats ? (
+        {tabLoading ? (
           <div className="flex h-64 items-center justify-center">
             <Loader size={32} className="animate-spin text-ink-400" />
           </div>
@@ -924,8 +975,8 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                   <StatCard index={0} icon={DollarSign} label="Total Revenue" value={formatPrice(stats?.total_revenue || 0)} color="bg-green-50 text-green-700" trend={12} />
                   <StatCard index={1} icon={ShoppingCart} label="Total Orders" value={stats?.total_orders || 0} color="bg-blue-50 text-blue-700" trend={8} />
-                  <StatCard index={2} icon={Package} label="Products" value={products.length || stats?.total_products || 0} color="bg-purple-50 text-purple-700" sub={`${lowStockProducts.length} low stock`} />
-                  <StatCard index={3} icon={Tags} label="Categories" value={categories.length || 0} color="bg-orange-50 text-orange-700" sub={`${lowStockProducts.length} low-stock items`} />
+                  <StatCard index={2} icon={Package} label="Products" value={stats?.total_products || 0} color="bg-purple-50 text-purple-700" sub={`${lowStockProducts.length} low stock`} />
+                  <StatCard index={3} icon={Tags} label="Categories" value={stats?.total_categories || 0} color="bg-orange-50 text-orange-700" sub={`${lowStockProducts.length} low-stock items`} />
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -1240,7 +1291,10 @@ export default function AdminDashboard() {
             product={productModal.id ? productModal : null}
             categories={categories}
             onClose={() => setProductModal(null)}
-            onSave={() => { setProductModal(null); fetchData(); }}
+            onSave={() => {
+              setProductModal(null);
+              invalidateDashboardData(['admin', 'products'], ['products'], ['admin', 'stats']);
+            }}
           />
         )}
       </AnimatePresence>
@@ -1250,7 +1304,10 @@ export default function AdminDashboard() {
           <CategoryModal
             category={categoryModal.id ? categoryModal : null}
             onClose={() => setCategoryModal(null)}
-            onSave={() => { setCategoryModal(null); fetchData(); }}
+            onSave={() => {
+              setCategoryModal(null);
+              invalidateDashboardData(['products', 'categories'], ['admin', 'stats']);
+            }}
           />
         )}
       </AnimatePresence>
@@ -1262,7 +1319,10 @@ export default function AdminDashboard() {
             customers={customers}
             products={products}
             onClose={() => setOrderModal(null)}
-            onSave={() => { setOrderModal(null); fetchData(); }}
+            onSave={() => {
+              setOrderModal(null);
+              invalidateDashboardData(['admin', 'orders'], ['admin', 'stats'], ['admin', 'top-products'], ['admin', 'products']);
+            }}
             onDelete={handleDeleteOrder}
           />
         )}

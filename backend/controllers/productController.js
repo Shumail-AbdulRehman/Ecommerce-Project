@@ -269,8 +269,18 @@ exports.getCategories = async (_req, res) => {
       return res.json(cached);
     }
 
-    const categories = await Category.find().select(CATEGORY_SELECT).sort({ name: 1 }).lean();
-    const payload = categories.map(categoryPayload);
+    const [categories, counts] = await Promise.all([
+      Category.find().select(CATEGORY_SELECT).sort({ name: 1 }).lean(),
+      Product.aggregate([
+        { $match: { is_active: true } },
+        { $group: { _id: "$category_id", product_count: { $sum: 1 } } },
+      ]),
+    ]);
+    const countByCategory = new Map(counts.map((item) => [item._id?.toString(), item.product_count]));
+    const payload = categories.map((category) => ({
+      ...categoryPayload(category),
+      product_count: countByCategory.get(category._id.toString()) || 0,
+    }));
     cacheSet("categories", payload);
     cacheHomeResponse(res);
     res.json(payload);

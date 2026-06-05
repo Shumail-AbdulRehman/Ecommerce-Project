@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import { ArrowRight, Star, Shield, Truck, RefreshCw } from 'lucide-react';
 import api from '../utils/api';
 import ProductCard from '../components/product/ProductCard';
@@ -303,22 +304,23 @@ function CategoryProductRows({ sections, loading }) {
 }
 
 export default function HomePage() {
-  const [featured, setFeatured] = useState([]);
-  const [sections, setSections] = useState([]);
-  const [loadingFeatured, setLoadingFeatured] = useState(true);
-  const [loadingSections, setLoadingSections] = useState(true);
+  const { data: featured = [], isLoading: loadingFeatured } = useQuery({
+    queryKey: ['products', 'featured'],
+    queryFn: async () => {
+      const { data } = await api.get('/products/featured');
+      return data;
+    },
+    staleTime: 2 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    api.get('/products/featured')
-      .then(({ data }) => setFeatured(data))
-      .catch(console.error)
-      .finally(() => setLoadingFeatured(false));
-
-    api.get(`/products/home-sections?limit=${HOME_SECTION_PRODUCT_LIMIT}&categoryLimit=${HOME_SECTION_CATEGORY_LIMIT}`)
-      .then(({ data }) => setSections(data))
-      .catch(console.error)
-      .finally(() => setLoadingSections(false));
-  }, []);
+  const { data: sections = [], isLoading: loadingSections } = useQuery({
+    queryKey: ['products', 'home-sections', HOME_SECTION_PRODUCT_LIMIT, HOME_SECTION_CATEGORY_LIMIT],
+    queryFn: async () => {
+      const { data } = await api.get(`/products/home-sections?limit=${HOME_SECTION_PRODUCT_LIMIT}&categoryLimit=${HOME_SECTION_CATEGORY_LIMIT}`);
+      return data;
+    },
+    staleTime: 2 * 60 * 1000,
+  });
 
   return (
     <div>
