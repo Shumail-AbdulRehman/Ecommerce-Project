@@ -29,7 +29,7 @@ function HeroSection() {
       <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&auto=format&q=80"
-          alt="Nazara premium storefront"
+          alt="Shumara premium storefront"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-ink-950/70 via-ink-950/30 to-transparent" />
@@ -240,7 +240,7 @@ function CategoryProductRows({ sections, loading }) {
             <span className="text-xs text-gold-600 font-medium tracking-widest uppercase">Fresh catalog</span>
             <h2 className="section-title mt-1">New Arrivals by Category</h2>
             <p className="text-sm text-ink-500 mt-3 max-w-2xl">
-              Shop the latest drops across every Nazara department, grouped into focused rows so each category is easy to scan.
+              Shop the latest drops across every Shumara department, grouped into focused rows so each category is easy to scan.
             </p>
           </div>
           <Link to="/products?sort=newest" className="btn-outline w-fit">

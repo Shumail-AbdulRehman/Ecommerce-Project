@@ -424,7 +424,7 @@ export default function Navbar({ products = [] }) {
               <span className={`font-display text-2xl font-semibold tracking-tight transition-colors duration-300 ${
                 isSolid ? darkMode ? 'text-white' : 'text-ink-950' : 'text-white'
               }`}>
-                NAZARA
+                SHUMARA
               </span>
               <span className={`hidden sm:block w-1 h-1 rounded-full mt-1 ${isSolid ? 'bg-gold-500' : 'bg-gold-400'}`} />
             </Link>

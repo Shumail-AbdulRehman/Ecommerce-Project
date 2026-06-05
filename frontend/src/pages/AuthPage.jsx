@@ -87,7 +87,7 @@ function OTPScreen({ email, onSuccess, onBack }) {
       const { data } = await api.post('/auth/verify-otp', { email, otp: clean });
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      toast.success('Email verified! Welcome to NAZARA 🎉');
+      toast.success('Email verified! Welcome to SHUMARA 🎉');
       onSuccess(data);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Invalid OTP');
@@ -346,7 +346,7 @@ export default function AuthPage() {
         <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000&auto=format&q=80"
           alt="fashion" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-ink-950/50 flex flex-col justify-end p-12">
-          <Link to="/" className="font-display text-5xl text-white font-semibold mb-4">NAZARA</Link>
+          <Link to="/" className="font-display text-5xl text-white font-semibold mb-4">SHUMARA</Link>
           <p className="text-ink-200 text-lg max-w-xs leading-relaxed">
             "Quality is never an accident. It is always the result of high intention."
           </p>
@@ -355,7 +355,7 @@ export default function AuthPage() {
 
       <div className="flex-1 flex flex-col items-center justify-center p-6 lg:p-16 bg-cream">
         <div className="w-full max-w-md">
-          <Link to="/" className="font-display text-3xl text-ink-950 font-semibold lg:hidden mb-8 block">NAZARA</Link>
+          <Link to="/" className="font-display text-3xl text-ink-950 font-semibold lg:hidden mb-8 block">SHUMARA</Link>
           <AnimatePresence mode="wait">
 
             {screen === 'forgot' && (

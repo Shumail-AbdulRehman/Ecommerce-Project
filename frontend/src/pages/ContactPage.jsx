@@ -52,7 +52,7 @@ export default function ContactPage() {
           <div className="space-y-5">
             <h2 className="font-semibold text-xl text-ink-950 mb-6">Contact Information</h2>
             {[
-              { icon: Mail, title: 'Email Us', value: 'support@nazara.com', sub: 'Reply within 24 hours' },
+              { icon: Mail, title: 'Email Us', value: 'support@shumara.store', sub: 'Reply within 24 hours' },
               { icon: Phone, title: 'Call Us', value: '+92 300 1234567', sub: 'Mon-Sat, 10am - 6pm' },
               { icon: MapPin, title: 'Visit Us', value: 'Gulberg, Lahore', sub: 'Punjab, Pakistan 54000' },
               { icon: Clock, title: 'Working Hours', value: 'Mon - Saturday', sub: '10:00 AM - 6:00 PM PKT' },

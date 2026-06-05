@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Starting Nazara E-Commerce (Development)"
+echo "Starting Shumara E-Commerce (Development)"
 echo ""
 
 # Start backend in background

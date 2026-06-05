@@ -102,7 +102,7 @@ exports.verifyOTP = async (req, res) => {
     const token = generateToken(user);
     sendWelcomeEmail(email, user.name).catch(console.error);
 
-    res.json({ message: "Email verified! Welcome to Nazara", token, user: safeUser(user) });
+    res.json({ message: "Email verified! Welcome to Shumara", token, user: safeUser(user) });
   } catch (err) {
     console.error("Verify OTP error:", err);
     res.status(500).json({ message: "Server error" });

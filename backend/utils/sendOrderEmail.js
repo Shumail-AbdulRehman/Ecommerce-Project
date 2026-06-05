@@ -271,7 +271,7 @@ function buildEmailHTML(order, status) {
             <td style="background:#f9fafb;padding:20px 32px;text-align:center;
                        border-top:1px solid #f0f0f0;">
               <p style="margin:0;color:#9CA3AF;font-size:12px;">
-                © ${new Date().getFullYear()} Nazara Store. All rights reserved.
+                © ${new Date().getFullYear()} Shumara Store. All rights reserved.
               </p>
             </td>
           </tr>

@@ -889,7 +889,7 @@ export default function AdminDashboard() {
       <div className="border-b border-ink-100 bg-white px-4 py-5 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-gold-600">Nazara Admin</p>
+            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-gold-600">Shumara Admin</p>
             <h1 className="text-2xl font-semibold text-ink-950">Ecommerce Dashboard</h1>
             <p className="mt-0.5 text-sm text-ink-400">Products, categories, orders, inventory, and sales activity</p>
           </div>

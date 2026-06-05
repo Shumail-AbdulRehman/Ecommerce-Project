@@ -8,7 +8,7 @@ async function main() {
   await connectDB();
   const email = process.env.ADMIN_EMAIL || process.argv[2] || "shumail1@gmail.com";
   const password = process.env.ADMIN_PASSWORD || process.argv[3] || "shumail1";
-  const name = process.env.ADMIN_NAME || process.argv[4] || "Nazara Admin";
+  const name = process.env.ADMIN_NAME || process.argv[4] || "Shumara Admin";
   const hash = await bcrypt.hash(password, 10);
 
   const user = await User.findOneAndUpdate(

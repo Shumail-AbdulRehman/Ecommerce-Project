@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
-            <Link to="/" className="font-display text-3xl text-white font-semibold">NAZARA</Link>
+            <Link to="/" className="font-display text-3xl text-white font-semibold">SHUMARA</Link>
             <p className="mt-3 text-sm text-ink-400 leading-relaxed">
               Premium products, curated for those who appreciate quality.
             </p>
@@ -65,7 +65,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-ink-800 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-ink-500">© {new Date().getFullYear()} NAZARA. All rights reserved.</p>
+          <p className="text-xs text-ink-500">© {new Date().getFullYear()} SHUMARA. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <a href="#" className="text-xs text-ink-500 hover:text-white transition-colors">Privacy</a>
             <a href="#" className="text-xs text-ink-500 hover:text-white transition-colors">Terms</a>

@@ -224,7 +224,7 @@ function descriptionFor(category, name, index) {
     "designed to feel considered, durable, and easy to use from day one",
     "built with thoughtful materials and a polished, gift-ready presentation",
   ];
-  return `${name} is a premium ${category.name.toLowerCase()} pick ${qualities[index % qualities.length]}. It fits naturally into the Nazara catalog with strong usability, modern styling, dependable quality, and details that make it suitable for repeat daily use.`;
+  return `${name} is a premium ${category.name.toLowerCase()} pick ${qualities[index % qualities.length]}. It fits naturally into the Shumara catalog with strong usability, modern styling, dependable quality, and details that make it suitable for repeat daily use.`;
 }
 
 async function seed() {

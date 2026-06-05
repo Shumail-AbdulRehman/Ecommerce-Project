@@ -22,14 +22,14 @@ router.post('/',
       await sendMail({
         to: process.env.SUPPORT_EMAIL || process.env.GMAIL_USER || process.env.EMAIL_USER || process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER,
         replyTo: email, 
-        subject: `[Nazara Contact] ${subject} — from ${name}`,
+        subject: `[Shumara Contact] ${subject} — from ${name}`,
         html: `
         <div style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px;">
           <div style="max-width:600px;margin:auto;background:#fff;border-radius:12px;
                       overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.1);">
             
             <div style="background:#111;color:#fff;padding:20px;text-align:center;">
-              <h2 style="margin:0;">Nazara Store</h2>
+              <h2 style="margin:0;">Shumara Store</h2>
               <p style="margin:5px 0 0;font-size:14px;">New Contact Message</p>
             </div>
 
@@ -43,7 +43,7 @@ router.post('/',
                 <p style="margin-top:10px;">${message}</p>
               </div>
               <div style="text-align:center;margin-top:25px;">
-                <a href="https://nazara-shop.vercel.app"
+                <a href="https://shumara-shop.vercel.app"
                   style="display:inline-block;padding:12px 25px;background:#111;
                          color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;">
                   Visit Website
@@ -53,7 +53,7 @@ router.post('/',
 
             <div style="background:#f1f1f1;padding:15px;text-align:center;
                         font-size:12px;color:#555;">
-              <p style="margin:0;">© ${new Date().getFullYear()} Nazara Store</p>
+              <p style="margin:0;">© ${new Date().getFullYear()} Shumara Store</p>
               <p style="margin:5px 0 0;">Sent from your website contact form</p>
             </div>
 

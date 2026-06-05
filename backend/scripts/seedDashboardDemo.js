@@ -2,17 +2,17 @@ require("dotenv").config();
 const { connectDB, mongoose } = require("../config/db");
 const { User, Product, Order } = require("../models");
 
-const DEMO_NOTE = "Nazara dashboard demo order";
+const DEMO_NOTE = "Shumara dashboard demo order";
 
 const demoCustomers = [
-  ["Ayesha Khan", "ayesha.demo@nazara.test", "Lahore", "Punjab"],
-  ["Hamza Malik", "hamza.demo@nazara.test", "Karachi", "Sindh"],
-  ["Sara Ahmed", "sara.demo@nazara.test", "Islamabad", "Islamabad Capital Territory"],
-  ["Bilal Raza", "bilal.demo@nazara.test", "Rawalpindi", "Punjab"],
-  ["Mariam Noor", "mariam.demo@nazara.test", "Faisalabad", "Punjab"],
-  ["Usman Tariq", "usman.demo@nazara.test", "Multan", "Punjab"],
-  ["Hira Shah", "hira.demo@nazara.test", "Hyderabad", "Sindh"],
-  ["Danish Ali", "danish.demo@nazara.test", "Peshawar", "Khyber Pakhtunkhwa"],
+  ["Ayesha Khan", "ayesha.demo@shumara.test", "Lahore", "Punjab"],
+  ["Hamza Malik", "hamza.demo@shumara.test", "Karachi", "Sindh"],
+  ["Sara Ahmed", "sara.demo@shumara.test", "Islamabad", "Islamabad Capital Territory"],
+  ["Bilal Raza", "bilal.demo@shumara.test", "Rawalpindi", "Punjab"],
+  ["Mariam Noor", "mariam.demo@shumara.test", "Faisalabad", "Punjab"],
+  ["Usman Tariq", "usman.demo@shumara.test", "Multan", "Punjab"],
+  ["Hira Shah", "hira.demo@shumara.test", "Hyderabad", "Sindh"],
+  ["Danish Ali", "danish.demo@shumara.test", "Peshawar", "Khyber Pakhtunkhwa"],
 ];
 
 const statuses = ["pending", "dispatched", "out_for_delivery", "delivered", "cancelled"];

@@ -61,7 +61,7 @@ if (process.env.SLACK_WEBHOOK_URL) {
     .then((mod) => {
       app.use(
         mod.monitor({
-          serviceName: process.env.SERVICE_NAME || "Nazara API",
+          serviceName: process.env.SERVICE_NAME || "Shumara API",
           slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
           maxLogSize: 10 * 1024 * 1024,
           maxFiles: 5,
@@ -112,7 +112,7 @@ app.get("/api/health", (req, res) => {
 
 
 app.get("/error", (req, res, next) => {
-  next(new Error("Test error from Nazara! 🚨"));
+  next(new Error("Test error from Shumara! 🚨"));
 });
 
 
@@ -123,7 +123,7 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  slackAlert(`🚨 *Error on Nazara*\n*Route:* ${req.method} ${req.path}\n*Error:* ${err.message}`);
+  slackAlert(`🚨 *Error on Shumara*\n*Route:* ${req.method} ${req.path}\n*Error:* ${err.message}`);
   res.status(err.status || 500).json({ message: err.message || "Internal server error" });
 });
 

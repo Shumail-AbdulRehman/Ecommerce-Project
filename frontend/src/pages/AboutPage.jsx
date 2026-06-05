@@ -23,7 +23,7 @@ export default function AboutPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
             <span className="text-gold-400 text-xs font-medium tracking-widest uppercase">Our Story</span>
             <h1 className="font-display text-5xl md:text-7xl text-white font-semibold mt-3 mb-4 leading-tight">
-              We are<br /><em className="text-gold-400 not-italic">NAZARA</em>
+              We are<br /><em className="text-gold-400 not-italic">SHUMARA</em>
             </h1>
             <p className="text-ink-200 text-lg max-w-xl leading-relaxed">
               A curated marketplace built on the belief that quality and beauty should be accessible to everyone.
@@ -39,7 +39,7 @@ export default function AboutPage() {
             <span className="text-xs text-gold-600 font-medium tracking-widest uppercase">Our Mission</span>
             <h2 className="section-title mt-2 mb-6">Crafted for those<br />who demand more.</h2>
             <p className="text-ink-600 leading-relaxed mb-4 text-lg">
-              NAZARA was founded in 2024 with a simple idea — the best products should be easy to discover, easy to buy, and worth every PKR.
+              SHUMARA was founded in 2024 with a simple idea — the best products should be easy to discover, easy to buy, and worth every PKR.
             </p>
             <p className="text-ink-600 leading-relaxed mb-8">
               We work directly with the finest makers and brands to bring you a selection that is as thoughtfully curated as it is beautiful. Every item in our store has been personally reviewed by our team.
