@@ -702,6 +702,16 @@ export default function AdminDashboard() {
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
   const [categorySearch, setCategorySearch] = useState('');
 
+  useEffect(() => {
+    const root = document.documentElement;
+    const hadDarkMode = root.classList.contains('dark');
+    root.classList.remove('dark');
+
+    return () => {
+      if (hadDarkMode) root.classList.add('dark');
+    };
+  }, []);
+
   const fetchProductsForAdmin = async () => {
     const first = await api.get('/products', { params: { limit: 200, page: 1 } });
     const productList = [...(first.data.products || [])];
