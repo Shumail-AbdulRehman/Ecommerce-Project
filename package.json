@@ -1,0 +1,8 @@
+{
+  "name": "mern-heroku-backend-launcher",
+  "version": "1.0.0",
+  "scripts": {
+    "heroku-prebuild": "npm install --prefix backend",
+    "start": "npm start --prefix backend"
+  }
+}
